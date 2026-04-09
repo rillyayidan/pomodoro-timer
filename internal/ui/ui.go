@@ -167,10 +167,12 @@ func (m Model) View() string {
 	}
 
 	// Today stats
-	totalWork, count, _ := logger.TodaySummary()
-	stats := statStyle.Render(fmt.Sprintf(
-		"Today: %d 🍅  |  %d min focused", count, totalWork,
-	))
+	totalWork, count, err := logger.TodaySummary()
+	statsText := fmt.Sprintf("Today: %d 🍅  |  %d min focused", count, totalWork)
+	if err != nil {
+		statsText = "Today: stats unavailable"
+	}
+	stats := statStyle.Render(statsText)
 
 	help := helpStyle.Render("[Space] start/pause   [r] reset   [s] skip   [q] quit")
 

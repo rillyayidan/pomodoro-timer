@@ -9,9 +9,9 @@ import (
 
 // Entry represents a single completed pomodoro session.
 type Entry struct {
-	Date      string `json:"date"`
-	Phase     string `json:"phase"`
-	Duration  int    `json:"duration_minutes"`
+	Date        string `json:"date"`
+	Phase       string `json:"phase"`
+	Duration    int    `json:"duration_minutes"`
 	CompletedAt string `json:"completed_at"`
 }
 
@@ -38,7 +38,9 @@ func Append(phase string, durationMinutes int) error {
 
 	var entries []Entry
 	if data, err := os.ReadFile(path); err == nil {
-		_ = json.Unmarshal(data, &entries)
+		if err := json.Unmarshal(data, &entries); err != nil {
+			return err
+		}
 	}
 
 	entries = append(entries, Entry{
