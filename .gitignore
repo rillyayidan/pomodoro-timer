@@ -1,0 +1,8 @@
+# Build outputs
+pomodoro.exe
+
+# Editor temporary files
+*.swp
+*.swo
+*.tmp
+.DS_Store
