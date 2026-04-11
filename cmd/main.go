@@ -6,9 +6,9 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/rillyayidan/pomodoro/internal/config"
-	"github.com/rillyayidan/pomodoro/internal/logger"
-	"github.com/rillyayidan/pomodoro/internal/ui"
+	"github.com/rillyayidan/pomodoro-timer/internal/config"
+	"github.com/rillyayidan/pomodoro-timer/internal/logger"
+	"github.com/rillyayidan/pomodoro-timer/internal/ui"
 )
 
 func main() {

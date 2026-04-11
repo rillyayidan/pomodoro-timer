@@ -7,10 +7,10 @@ import (
 	"github.com/charmbracelet/bubbles/progress"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/rillyayidan/pomodoro/internal/config"
-	"github.com/rillyayidan/pomodoro/internal/logger"
-	"github.com/rillyayidan/pomodoro/internal/notify"
-	"github.com/rillyayidan/pomodoro/internal/timer"
+	"github.com/rillyayidan/pomodoro-timer/internal/config"
+	"github.com/rillyayidan/pomodoro-timer/internal/logger"
+	"github.com/rillyayidan/pomodoro-timer/internal/notify"
+	"github.com/rillyayidan/pomodoro-timer/internal/timer"
 )
 
 // ---- styles ----------------------------------------------------------------
@@ -204,7 +204,9 @@ func tick() tea.Cmd {
 func (m Model) advancePhase() (tea.Model, tea.Cmd) {
 	// Log completed phase
 	durationMin := int(m.state.TotalDuration.Minutes())
-	_ = logger.Append(m.state.Phase.String(), durationMin)
+	if err := logger.Append(m.state.Phase.String(), durationMin); err != nil {
+		m.statusMsg = fmt.Sprintf("Log failed: %v", err)
+	}
 
 	// Notify
 	var notifTitle, notifBody string

@@ -1,4 +1,4 @@
-module github.com/rillyayidan/pomodoro
+module github.com/rillyayidan/pomodoro-timer
 
 go 1.22
 

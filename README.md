@@ -28,10 +28,16 @@ pomodoro/
 ## Installation
 
 ```powershell
-git clone https://github.com/rillyayidan/pomodoro
-cd pomodoro
+git clone https://github.com/rillyayidan/pomodoro-timer.git
+cd pomodoro-timer
 go mod tidy
 go build -o pomodoro.exe ./cmd
+```
+
+Or install directly:
+
+```powershell
+go install github.com/rillyayidan/pomodoro-timer/cmd@latest
 ```
 
 ## Usage
