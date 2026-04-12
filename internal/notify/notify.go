@@ -2,6 +2,7 @@ package notify
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"runtime"
 )
@@ -34,15 +35,22 @@ func sendDesktop(title, body string) {
 			title, body,
 		)
 		cmd := exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command", script)
-		_ = cmd.Run()
+		if err := cmd.Run(); err != nil {
+			fmt.Fprintf(os.Stderr, "notification failed: %v\n", err)
+		}
 
 	case "darwin":
+
 		script := fmt.Sprintf(`display notification "%s" with title "%s"`, body, title)
 		cmd := exec.Command("osascript", "-e", script)
-		_ = cmd.Run()
+		if err := cmd.Run(); err != nil {
+			fmt.Fprintf(os.Stderr, "notification failed: %v\n", err)
+		}
 
 	default: // Linux / WSL
 		cmd := exec.Command("notify-send", title, body)
-		_ = cmd.Run()
+		if err := cmd.Run(); err != nil {
+			fmt.Fprintf(os.Stderr, "notification failed: %v\n", err)
+		}
 	}
 }

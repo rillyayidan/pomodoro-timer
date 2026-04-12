@@ -202,6 +202,8 @@ func tick() tea.Cmd {
 // advancePhase completes the current phase, logs it, notifies, then starts
 // the next phase according to Pomodoro rules.
 func (m Model) advancePhase() (tea.Model, tea.Cmd) {
+	wasRunning := m.state.Running
+
 	// Log completed phase
 	durationMin := int(m.state.TotalDuration.Minutes())
 	if err := logger.Append(m.state.Phase.String(), durationMin); err != nil {
@@ -241,8 +243,15 @@ func (m Model) advancePhase() (tea.Model, tea.Cmd) {
 	m.state.Phase = nextPhase
 	m.state.TotalDuration = nextDuration
 	m.state.Remaining = nextDuration
-	m.state.Running = true
-	m.statusMsg = ""
+	m.state.Running = wasRunning
+	if !wasRunning {
+		m.statusMsg = "Skipped"
+	} else {
+		m.statusMsg = ""
+	}
 
-	return m, tick()
+	if wasRunning {
+		return m, tick()
+	}
+	return m, nil
 }
