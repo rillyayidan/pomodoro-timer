@@ -38,8 +38,10 @@ func Append(phase string, durationMinutes int) error {
 
 	var entries []Entry
 	if data, err := os.ReadFile(path); err == nil {
-		if err := json.Unmarshal(data, &entries); err != nil {
-			return err
+		if len(data) > 0 {
+			if err := json.Unmarshal(data, &entries); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -69,6 +71,9 @@ func TodaySummary() (totalWork int, pomodoroCount int, err error) {
 	}
 	if err != nil {
 		return 0, 0, err
+	}
+	if len(data) == 0 {
+		return 0, 0, nil
 	}
 	var entries []Entry
 	if err := json.Unmarshal(data, &entries); err != nil {
