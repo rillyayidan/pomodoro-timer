@@ -24,13 +24,28 @@ func (p Phase) String() string {
 	}
 }
 
+func (p Phase) IsBreak() bool {
+	return p == PhaseShortBreak || p == PhaseLongBreak
+}
+
+func (p Phase) Icon() string {
+	switch p {
+	case PhaseWork:
+		return "🍅"
+	case PhaseShortBreak, PhaseLongBreak:
+		return "☕"
+	default:
+		return ""
+	}
+}
+
 // State holds the mutable runtime state of the timer.
 type State struct {
-	Phase          Phase
-	Remaining      time.Duration
-	TotalDuration  time.Duration
-	PomodoroCount  int
-	Running        bool
+	Phase         Phase
+	Remaining     time.Duration
+	TotalDuration time.Duration
+	PomodoroCount int
+	Running       bool
 }
 
 // TickMsg is sent every second by the Bubble Tea tick command.

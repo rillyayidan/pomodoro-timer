@@ -140,12 +140,11 @@ func (m Model) View() string {
 	}
 
 	// Phase label
-	var phaseLabel string
-	if m.state.Phase == timer.PhaseWork {
-		phaseLabel = phaseWorkStyle.Render("🍅 " + m.state.Phase.String())
-	} else {
-		phaseLabel = phaseBreakStyle.Render("☕ " + m.state.Phase.String())
+	phaseStyle := phaseWorkStyle
+	if m.state.Phase.IsBreak() {
+		phaseStyle = phaseBreakStyle
 	}
+	phaseLabel := phaseStyle.Render(m.state.Phase.Icon() + " " + m.state.Phase.String())
 
 	// Big countdown
 	mins := int(m.state.Remaining.Minutes())
