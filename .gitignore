@@ -6,3 +6,4 @@ pomodoro.exe
 *.swo
 *.tmp
 .DS_Store
+settings.json
