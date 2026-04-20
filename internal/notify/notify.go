@@ -11,7 +11,9 @@ import (
 // and plays a terminal beep.
 func Send(title, body string) {
 	Beep()
-	sendDesktop(title, body)
+	if err := sendDesktop(title, body); err != nil {
+		fmt.Fprintf(os.Stderr, "notification failed: %v\n", err)
+	}
 }
 
 // Beep writes the BEL character to stdout — works on all terminals.
@@ -20,7 +22,7 @@ func Beep() {
 }
 
 // sendDesktop dispatches a native notification based on the OS.
-func sendDesktop(title, body string) {
+func sendDesktop(title, body string) error {
 	switch runtime.GOOS {
 	case "windows":
 		// PowerShell toast notification (no extra deps needed)
@@ -35,22 +37,18 @@ func sendDesktop(title, body string) {
 			title, body,
 		)
 		cmd := exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command", script)
-		if err := cmd.Run(); err != nil {
-			fmt.Fprintf(os.Stderr, "notification failed: %v\n", err)
-		}
+		return cmd.Run()
 
 	case "darwin":
-
 		script := fmt.Sprintf(`display notification "%s" with title "%s"`, body, title)
 		cmd := exec.Command("osascript", "-e", script)
-		if err := cmd.Run(); err != nil {
-			fmt.Fprintf(os.Stderr, "notification failed: %v\n", err)
-		}
+		return cmd.Run()
 
 	default: // Linux / WSL
-		cmd := exec.Command("notify-send", title, body)
-		if err := cmd.Run(); err != nil {
-			fmt.Fprintf(os.Stderr, "notification failed: %v\n", err)
+		if _, err := exec.LookPath("notify-send"); err != nil {
+			return err
 		}
+		cmd := exec.Command("notify-send", title, body)
+		return cmd.Run()
 	}
 }
