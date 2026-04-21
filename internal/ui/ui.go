@@ -54,11 +54,12 @@ var (
 
 // Model is the Bubble Tea model for the Pomodoro TUI.
 type Model struct {
-	cfg       config.Config
-	state     timer.State
-	progress  progress.Model
-	quitting  bool
-	statusMsg string
+	cfg        config.Config
+	state      timer.State
+	progress   progress.Model
+	quitting   bool
+	statusMsg  string
+	todayStats string
 }
 
 // New creates and initialises a new TUI model.
@@ -74,7 +75,9 @@ func New(cfg config.Config) Model {
 		Remaining:     time.Duration(cfg.WorkDuration) * time.Minute,
 		Running:       false,
 	}
-	return Model{cfg: cfg, state: s, progress: p}
+	m := Model{cfg: cfg, state: s, progress: p}
+	m.refreshStats()
+	return m
 }
 
 // ---- tea.Model interface ---------------------------------------------------
@@ -165,13 +168,7 @@ func (m Model) View() string {
 		runStatus = m.statusMsg
 	}
 
-	// Today stats
-	totalWork, count, err := logger.TodaySummary()
-	statsText := fmt.Sprintf("Today: %d 🍅  |  %d min focused", count, totalWork)
-	if err != nil {
-		statsText = "Today: stats unavailable"
-	}
-	stats := statStyle.Render(statsText)
+	stats := m.todayStats
 
 	help := helpStyle.Render("[Space] start/pause   [r] reset   [s] skip   [q] quit")
 
@@ -192,6 +189,15 @@ func (m Model) View() string {
 
 // ---- helpers ---------------------------------------------------------------
 
+func (m *Model) refreshStats() {
+	totalWork, count, err := logger.TodaySummary()
+	if err != nil {
+		m.todayStats = statStyle.Render("Today: stats unavailable")
+		return
+	}
+	m.todayStats = statStyle.Render(fmt.Sprintf("Today: %d 🍅  |  %d min focused", count, totalWork))
+}
+
 func tick() tea.Cmd {
 	return tea.Tick(time.Second, func(t time.Time) tea.Msg {
 		return timer.TickMsg(t)
@@ -207,6 +213,8 @@ func (m Model) advancePhase() (tea.Model, tea.Cmd) {
 	durationMin := int(m.state.TotalDuration.Minutes())
 	if err := logger.Append(m.state.Phase.String(), durationMin); err != nil {
 		m.statusMsg = fmt.Sprintf("Log failed: %v", err)
+	} else {
+		m.refreshStats()
 	}
 
 	// Notify

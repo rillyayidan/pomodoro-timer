@@ -56,12 +56,11 @@ Controls (inside the TUI):
 	}
 
 	// ---- build config & run --------------------------------------------------
-	cfg := config.Config{
-		WorkDuration:       *work,
-		ShortBreakDuration: *short,
-		LongBreakDuration:  *long,
-		LongBreakInterval:  *interval,
-	}
+	cfg := config.Default()
+	cfg.WorkDuration = *work
+	cfg.ShortBreakDuration = *short
+	cfg.LongBreakDuration = *long
+	cfg.LongBreakInterval = *interval
 
 	model := ui.New(cfg)
 	p := tea.NewProgram(model, tea.WithAltScreen())
