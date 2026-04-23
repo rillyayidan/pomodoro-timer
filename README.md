@@ -6,6 +6,7 @@ A terminal Pomodoro timer built with Go and Bubble Tea.
 - Interactive TUI with animated progress bar
 - Desktop notifications (Windows toast / macOS / Linux)
 - Terminal beep at end of each phase
+- Next-phase hint in the TUI
 - Daily session log saved to `~/.pomodoro/logs/YYYY-MM-DD.json`
 - Custom durations via flags
 

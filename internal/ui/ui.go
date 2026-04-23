@@ -170,6 +170,7 @@ func (m Model) View() string {
 
 	stats := m.todayStats
 
+	nextPhase := statStyle.Render(m.nextPhaseLabel())
 	help := helpStyle.Render("[Space] start/pause   [r] reset   [s] skip   [q] quit")
 
 	pomCount := fmt.Sprintf("Pomodoro #%d", m.state.PomodoroCount+1)
@@ -180,6 +181,7 @@ func (m Model) View() string {
 		clock,
 		bar,
 		runStatus,
+		nextPhase,
 		stats,
 		help,
 	)
@@ -196,6 +198,20 @@ func (m *Model) refreshStats() {
 		return
 	}
 	m.todayStats = statStyle.Render(fmt.Sprintf("Today: %d 🍅  |  %d min focused", count, totalWork))
+}
+
+func (m Model) nextPhaseLabel() string {
+	switch m.state.Phase {
+	case timer.PhaseWork:
+		if (m.state.PomodoroCount+1)%m.cfg.LongBreakInterval == 0 {
+			return "Next: Long Break ☕"
+		}
+		return "Next: Short Break ☕"
+	case timer.PhaseShortBreak, timer.PhaseLongBreak:
+		return "Next: Work 🍅"
+	default:
+		return "Next: Work"
+	}
 }
 
 func tick() tea.Cmd {
