@@ -16,6 +16,7 @@ func main() {
 	work := flag.Int("work", 25, "Work duration in minutes")
 	short := flag.Int("short", 5, "Short break duration in minutes")
 	long := flag.Int("long", 15, "Long break duration in minutes")
+	silent := flag.Bool("silent", false, "Disable desktop notifications and beep")
 	interval := flag.Int("interval", 4, "Pomodoros before a long break")
 	statsOnly := flag.Bool("stats", false, "Show today's stats and exit")
 	flag.Usage = func() {
@@ -61,6 +62,7 @@ Controls (inside the TUI):
 	cfg.ShortBreakDuration = *short
 	cfg.LongBreakDuration = *long
 	cfg.LongBreakInterval = *interval
+	cfg.Silent = *silent
 
 	model := ui.New(cfg)
 	p := tea.NewProgram(model, tea.WithAltScreen())

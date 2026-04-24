@@ -6,6 +6,7 @@ A terminal Pomodoro timer built with Go and Bubble Tea.
 - Interactive TUI with animated progress bar
 - Desktop notifications (Windows toast / macOS / Linux)
 - Terminal beep at end of each phase
+- Optionally disable sound and notifications with `-silent`
 - Next-phase hint in the TUI
 - Daily session log saved to `~/.pomodoro/logs/YYYY-MM-DD.json`
 - Custom durations via flags
@@ -49,6 +50,9 @@ go install github.com/rillyayidan/pomodoro-timer/cmd@latest
 
 # Custom durations
 ./pomodoro.exe -work 50 -short 10 -long 20 -interval 3
+
+# Disable notifications and beep
+./pomodoro.exe -silent
 
 # Show today's stats without launching TUI
 ./pomodoro.exe -stats

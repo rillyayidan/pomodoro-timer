@@ -244,7 +244,9 @@ func (m Model) advancePhase() (tea.Model, tea.Cmd) {
 		notifTitle = "Break over! ☕"
 		notifBody = "Back to work."
 	}
-	notify.Send(notifTitle, notifBody)
+	if !m.cfg.Silent {
+		notify.Send(notifTitle, notifBody)
+	}
 
 	// Determine next phase
 	var nextPhase timer.Phase
