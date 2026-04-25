@@ -245,7 +245,9 @@ func (m Model) advancePhase() (tea.Model, tea.Cmd) {
 		notifBody = "Back to work."
 	}
 	if !m.cfg.Silent {
-		notify.Send(notifTitle, notifBody)
+		if err := notify.Send(notifTitle, notifBody); err != nil {
+			m.statusMsg = fmt.Sprintf("Notify failed: %v", err)
+		}
 	}
 
 	// Determine next phase
