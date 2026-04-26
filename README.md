@@ -59,6 +59,7 @@ go install github.com/rillyayidan/pomodoro-timer/cmd@latest
 
 # Print the version
 ./pomodoro.exe -version
+./pomodoro.exe -v
 ```
 
 ## TUI controls

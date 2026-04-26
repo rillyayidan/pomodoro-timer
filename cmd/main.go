@@ -21,6 +21,7 @@ func main() {
 	silent := flag.Bool("silent", false, "Disable desktop notifications and beep")
 	interval := flag.Int("interval", 4, "Pomodoros before a long break")
 	version := flag.Bool("version", false, "Print version and exit")
+	shortVersion := flag.Bool("v", false, "Print version and exit")
 	statsOnly := flag.Bool("stats", false, "Show today's stats and exit")
 	flag.Usage = func() {
 		fmt.Fprintln(os.Stderr, `
@@ -41,7 +42,7 @@ Controls (inside the TUI):
 	flag.Parse()
 
 	// ---- version flag -------------------------------------------------------
-	if *version {
+	if *version || *shortVersion {
 		fmt.Printf("pomodoro version %s\n", appVersion)
 		return
 	}
