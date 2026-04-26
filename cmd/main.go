@@ -11,6 +11,8 @@ import (
 	"github.com/rillyayidan/pomodoro-timer/internal/ui"
 )
 
+const appVersion = "0.1.0"
+
 func main() {
 	// ---- flags ---------------------------------------------------------------
 	work := flag.Int("work", 25, "Work duration in minutes")
@@ -18,6 +20,7 @@ func main() {
 	long := flag.Int("long", 15, "Long break duration in minutes")
 	silent := flag.Bool("silent", false, "Disable desktop notifications and beep")
 	interval := flag.Int("interval", 4, "Pomodoros before a long break")
+	version := flag.Bool("version", false, "Print version and exit")
 	statsOnly := flag.Bool("stats", false, "Show today's stats and exit")
 	flag.Usage = func() {
 		fmt.Fprintln(os.Stderr, `
@@ -36,6 +39,12 @@ Controls (inside the TUI):
   q       quit`)
 	}
 	flag.Parse()
+
+	// ---- version flag -------------------------------------------------------
+	if *version {
+		fmt.Printf("pomodoro version %s\n", appVersion)
+		return
+	}
 
 	// ---- stats-only mode -----------------------------------------------------
 	if *statsOnly {

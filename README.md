@@ -56,6 +56,9 @@ go install github.com/rillyayidan/pomodoro-timer/cmd@latest
 
 # Show today's stats without launching TUI
 ./pomodoro.exe -stats
+
+# Print the version
+./pomodoro.exe -version
 ```
 
 ## TUI controls
