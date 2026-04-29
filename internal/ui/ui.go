@@ -280,5 +280,8 @@ func (m Model) advancePhase() (tea.Model, tea.Cmd) {
 	if wasRunning {
 		return m, tick()
 	}
+	if m.statusMsg == "" {
+		m.statusMsg = "Skipped"
+	}
 	return m, nil
 }
