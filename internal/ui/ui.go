@@ -156,7 +156,15 @@ func (m Model) View() string {
 
 	// Progress bar
 	elapsed := m.state.TotalDuration - m.state.Remaining
-	pct := float64(elapsed) / float64(m.state.TotalDuration)
+	pct := 0.0
+	if m.state.TotalDuration > 0 {
+		pct = float64(elapsed) / float64(m.state.TotalDuration)
+	}
+	if pct < 0 {
+		pct = 0
+	} else if pct > 1 {
+		pct = 1
+	}
 	bar := m.progress.ViewAs(pct)
 
 	// Status
