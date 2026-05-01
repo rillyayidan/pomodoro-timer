@@ -172,7 +172,7 @@ func (m Model) View() string {
 	if m.state.Running {
 		runStatus = "▶  Running — press Space to pause"
 	}
-	if m.statusMsg != "" && !m.state.Running {
+	if m.statusMsg != "" {
 		runStatus = m.statusMsg
 	}
 
